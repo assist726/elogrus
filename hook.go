@@ -3,6 +3,7 @@ package elogrus
 import (
 	"context"
 	"fmt"
+	"path"
 	"strings"
 	"time"
 
@@ -178,9 +179,13 @@ func createMessage(entry *logrus.Entry, hook *ElasticHook) *message {
 
 	var file string
 	var function string
+	var line string
 	if entry.HasCaller() {
 		file = entry.Caller.File
-		function = entry.Caller.Function
+		//function = entry.Caller.Function
+		function = fmt.Sprintf("%s()", entry.Caller.Function)
+		filename := path.Base(entry.Caller.File)
+		line = fmt.Sprintf("%s:%d", filename, entry.Caller.Line)
 	}
 
 	return &message{
@@ -188,6 +193,7 @@ func createMessage(entry *logrus.Entry, hook *ElasticHook) *message {
 		entry.Time.UTC().Format(time.RFC3339Nano),
 		file,
 		function,
+		line,
 		entry.Message,
 		entry.Data,
 		strings.ToUpper(level),
