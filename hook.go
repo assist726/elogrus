@@ -37,6 +37,7 @@ type message struct {
 	Timestamp string `json:"@timestamp"`
 	File      string `json:"File,omitempty"`
 	Func      string `json:"Func,omitempty"`
+	Line      string `json:"Line,omitempty"`
 	Message   string `json:"Message,omitempty"`
 	Data      logrus.Fields
 	Level     string `json:"Level,omitempty"`
